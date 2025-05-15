@@ -1,5 +1,5 @@
 import * as ToggleGroup from "@radix-ui/react-toggle-group";
-import { House, ClipboardList, ScrollText, History } from "lucide-react";
+import { House, ClipboardList } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const navItems = [
