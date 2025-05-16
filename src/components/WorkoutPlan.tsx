@@ -175,14 +175,14 @@ function handleEditExercise(index: number, updatedExercise: Exercise) {
                 <>
                   <input
                     type="number"
-                    value={exercise.min}
+                    value={exercise.min > 0 ? exercise.min : ""}
                     onChange={(e) => handleEditExercise(index, { ...exercise, min: Number(e.target.value) })}
                     className="bg-zinc-700 flex rounded-md p-0.5 w-6 h-9 text-right"
                   />
                   <span>:</span>
                   <input
                     type="number"
-                    value={exercise.sec}
+                    value={exercise.sec > 0 ? exercise.sec : ""}
                     onChange={(e) => handleEditExercise(index, { ...exercise, sec: Number(e.target.value) })}
                     className="bg-zinc-700 flex rounded-md p-0.5 w-6 h-9 text-right"
                   />
@@ -191,9 +191,9 @@ function handleEditExercise(index: number, updatedExercise: Exercise) {
                 <>
                   <input
                     type="number"
-                    value={exercise.reps}
+                    value={exercise.reps > 0 ? exercise.reps : ""}
                     onChange={(e) => handleEditExercise(index, { ...exercise, reps: Number(e.target.value) })}
-                    className="bg-zinc-700 flex rounded-md p-1.5 w-9 text-right appearance-none"
+                    className="bg-zinc-700 flex rounded-md p-1.5 w-8 text-right appearance-none"
                   />
                   <span>x</span>
                 </>
@@ -211,9 +211,9 @@ function handleEditExercise(index: number, updatedExercise: Exercise) {
                 <>
                   <input
                     type="number"
-                    value={exercise.kg}
+                    value={exercise.kg > 0 ? exercise.kg : ""}
                     onChange={(e) => handleEditExercise(index, { ...exercise, kg: Number(e.target.value) })}
-                    className="bg-zinc-700 flex rounded-md p-1.5 w-9 text-right"
+                    className="bg-zinc-700 flex rounded-md p-1.5 max-w-10 text-right"
                   />
                   <span>kg</span>
                 </>
