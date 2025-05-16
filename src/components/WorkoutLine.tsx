@@ -1,7 +1,7 @@
-import { useState } from "react";
 
 import * as Checkbox from "@radix-ui/react-checkbox";
 import { Check } from "lucide-react";
+import { useState } from "react";
 
 interface WorkoutLineProps {
   data: Exercise;

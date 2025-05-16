@@ -1,8 +1,9 @@
 // import globals from "globals";
 import pluginJs from "@eslint/js";
-import tseslint from "typescript-eslint";
+import pluginImport from 'eslint-plugin-import';
 import pluginReact from "eslint-plugin-react";
 import React from "react";
+import tseslint from "typescript-eslint";
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
@@ -20,7 +21,10 @@ export default [
         React: 'readonly',
       },
     },
-    plugins: { React },
+    plugins: { 
+      React,
+      import: pluginImport
+    },
     settings: {
       react: {
         version: 'detect',
@@ -29,6 +33,30 @@ export default [
     rules: {
       'react/react-in-jsx-scope': 'off',
       'react/jsx-uses-react': 'off',
+      'import/order': [
+        'warn',
+        {
+          groups: [
+            'builtin',
+            'external',
+            'internal',
+            ['parent', 'sibling', 'index']
+          ],
+          pathGroups: [
+            {
+              pattern: '@/**',
+              group: 'internal',
+              position: 'after'
+            }
+          ],
+          pathGroupsExcludedImportTypes: ['builtin'],
+          'newlines-between': 'always',
+          alphabetize: {
+            order: 'asc',
+            caseInsensitive: true
+          }
+        }
+      ]
     },
   },
   pluginJs.configs.recommended,

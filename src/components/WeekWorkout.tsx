@@ -1,8 +1,11 @@
-import useWorkout from "@/hooks/useWorkout";
 import * as Dialog from "@radix-ui/react-dialog";
-import { Modal } from "./Modal";
-import { Card } from "./Card";
 import { CircleCheck } from "lucide-react";
+
+import useWorkout from "@/hooks/useWorkout";
+
+import { Card } from "./Card";
+import { Modal } from "./Modal";
+
 
 interface WeekWorkoutProps {
   id: string;

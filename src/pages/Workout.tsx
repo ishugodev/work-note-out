@@ -1,23 +1,27 @@
-import { Button } from "@/components/Button";
-import { NavigatorBar } from "@/components/NavigatorBar";
-import { WeekWorkout } from "@/components/WeekWorkout";
 import { Plus } from "lucide-react";
-import useWorkout from "@/hooks/useWorkout";
 import { useState } from "react";
-import { WorkoutPlan } from "@/components/WorkoutPlan";
 import { Link } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 
+import { Button } from "@/components/Button";
+import { NavigatorBar } from "@/components/NavigatorBar";
+import { WeekWorkout } from "@/components/WeekWorkout";
+import { WorkoutPlan } from "@/components/WorkoutPlan";
+import useWorkout from "@/hooks/useWorkout";
+
 export function Workout() {
-  const { workoutData, addWeeklyPlan, editWeeklyPlan, removeWeeklyPlan } = useWorkout();
-  const [focusedWeekId, setFocusedWeekId] = useState('');
+  const { workoutData, addWeeklyPlan, editWeeklyPlan, removeWeeklyPlan } =
+    useWorkout();
+  const [focusedWeekId, setFocusedWeekId] = useState("");
 
   const handleAddWeeklyPlan = () => {
     addWeeklyPlan();
   };
 
   const handleRemoveWeeklyPlan = (planId: string) => {
-    const confirmDelete = confirm("Do you want to delete the week that you selected?");
+    const confirmDelete = confirm(
+      "Do you want to delete the week that you selected?"
+    );
     if (confirmDelete) {
       alert("You deleted the week!");
       removeWeeklyPlan(planId);
@@ -30,7 +34,7 @@ export function Workout() {
 
   const toggleWorkout = (day: Weekday, workoutId: string) => {
     if (!focusedWeekId) return;
-    
+
     const plan = workoutData.weeklyPlans.find((p) => p.id === focusedWeekId);
     if (!plan) return;
 
@@ -82,7 +86,10 @@ export function Workout() {
                   {workoutData.weeklyPlans.length > 1 && (
                     <div className="flex justify-between items-center mb-2">
                       <p>{index + 1}º week</p>
-                      <Button className="text-red-500 cursor-pointer" onClick={() => handleRemoveWeeklyPlan(plan.id)}>
+                      <Button
+                        className="text-red-500 cursor-pointer"
+                        onClick={() => handleRemoveWeeklyPlan(plan.id)}
+                      >
                         delete week
                       </Button>
                     </div>
@@ -99,7 +106,9 @@ export function Workout() {
               );
             })
           ) : (
-            <p className="text-zinc-500 dark:text-zinc-400">No weekly plans yet.</p>
+            <p className="text-zinc-500 dark:text-zinc-400">
+              No weekly plans yet.
+            </p>
           )}
         </div>
 
@@ -111,7 +120,9 @@ export function Workout() {
           <span>Add week</span>
         </Button>
 
-        <p className="text-zinc-500 mt-6 mb-4 dark:text-zinc-400">Workout plan</p>
+        <p className="text-zinc-500 mt-6 mb-4 dark:text-zinc-400">
+          Workout plan
+        </p>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {workoutData.plannedWorkouts.length > 0 ? (
@@ -119,7 +130,9 @@ export function Workout() {
               <WorkoutPlan key={plan.id} planId={plan.id} mode="view" />
             ))
           ) : (
-            <p className="text-zinc-500 dark:text-zinc-400">No workout plans yet.</p>
+            <p className="text-zinc-500 dark:text-zinc-400">
+              No workout plans yet.
+            </p>
           )}
         </div>
 

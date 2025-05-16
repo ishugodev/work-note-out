@@ -1,9 +1,10 @@
+import { useNavigate, useParams } from "react-router-dom";
+
 import { Button } from "@/components/Button";
 import { GoBack } from "@/components/GoBack";
 import { NavigatorBar } from "@/components/NavigatorBar";
 import { WorkoutPlan } from "@/components/WorkoutPlan";
 import useWorkout from "@/hooks/useWorkout";
-import { useNavigate, useParams } from "react-router-dom";
 
 export function EditPlan() {
   const params = useParams<{ id: string }>();

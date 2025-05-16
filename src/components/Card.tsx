@@ -1,5 +1,5 @@
-import { Box, Card as RadixCard } from "@radix-ui/themes";
 import { Slot } from "@radix-ui/react-slot";
+import { Box, Card as RadixCard } from "@radix-ui/themes";
 import React from "react";
 
 interface CardProps extends React.HtmlHTMLAttributes<HTMLDivElement> {

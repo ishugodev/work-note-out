@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
-import { NavigatorBar } from "../components/NavigatorBar";
+import { useEffect, useState } from "react";
+
 import { WorkoutPlan } from "@/components/WorkoutPlan";
 import useWorkout from "@/hooks/useWorkout";
+
+import { NavigatorBar } from "../components/NavigatorBar";
 
 export function Home() {
   const { workoutData } = useWorkout();
@@ -21,7 +23,7 @@ export function Home() {
 
     const workoutIdsForToday = currentPlan?.days?.[today]?.workoutId || [];
 
-    const allTodayWorkouts = workoutData.plannedWorkouts.filter(workout =>
+    const allTodayWorkouts = workoutData.plannedWorkouts.filter((workout) =>
       workoutIdsForToday.includes(workout.id)
     );
 
@@ -33,19 +35,26 @@ export function Home() {
       <div className="mt-8 mb-32">
         <h1 className="text-2xl mb-4">Your workout</h1>
         <p className="text-zinc-500 mb-2 dark:text-zinc-400">
-          <span>{new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(new Date())},&nbsp;</span>
+          <span>
+            {new Intl.DateTimeFormat("en-US", { weekday: "long" }).format(
+              new Date()
+            )}
+            ,&nbsp;
+          </span>
           <span>{new Date().toLocaleDateString()}</span>
         </p>
-        {
-          workoutData.weeklyPlans.length > 1 && (
-            <p className="mb-2">{workoutData.currentIndexWeek + 1}º week</p>
-          )
-        }
+        {workoutData.weeklyPlans.length > 1 && (
+          <p className="mb-2">{workoutData.currentIndexWeek + 1}º week</p>
+        )}
 
         <section className="grid gap-3">
           {todayWorkouts.length > 0 ? (
             todayWorkouts.map((workout) => (
-              <WorkoutPlan key={workout.id} planId={workout.id} mode="working" />
+              <WorkoutPlan
+                key={workout.id}
+                planId={workout.id}
+                mode="working"
+              />
             ))
           ) : (
             <p>No workout planned for today.</p>

@@ -1,12 +1,15 @@
+import { Check, Plus, Repeat2, Timer, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Check, Plus, Repeat2, Timer, X } from "lucide-react";
+import { v4 as uuidv4 } from "uuid";
+
+import useWorkout from "@/hooks/useWorkout";
+
 import { Button } from "./Button";
 import { Card } from "./Card";
-import { WorkoutLine } from "./WorkoutLine";
 import { ModeToggle } from "./ModeToggle";
-import useWorkout from "@/hooks/useWorkout";
-import { v4 as uuidv4 } from "uuid";
+import { WorkoutLine } from "./WorkoutLine";
+
 
 interface WorkoutPlanProps {
   mode: "create" | "edit" | "view" | "working";
@@ -14,7 +17,8 @@ interface WorkoutPlanProps {
 }
 
 export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
-  const { workoutData, addExercise, removeExercise, addWorkout, editWorkout } = useWorkout();
+  const { workoutData, addExercise, removeExercise, addWorkout, editWorkout } =
+    useWorkout();
   const [title, setTitle] = useState("");
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const navigate = useNavigate();
@@ -26,7 +30,9 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
 
   useEffect(() => {
     if (!isCreating) {
-      const plan = workoutData.plannedWorkouts.find((workout) => workout.id === planId);
+      const plan = workoutData.plannedWorkouts.find(
+        (workout) => workout.id === planId
+      );
       if (plan) {
         setTitle(plan.name);
         setExercises(plan.exercises);
@@ -39,7 +45,7 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
       const plan = workoutData.plannedWorkouts.find(
         (workout) => workout.id === planId
       );
-      
+
       if (plan) {
         setTitle(plan.name);
         setExercises(plan.exercises);
@@ -49,9 +55,11 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
 
   function handleEditPlanName(name: string) {
     setTitle(name);
-  
+
     if (isEditing) {
-      const plan = workoutData.plannedWorkouts.find(plan => plan.id === planId);
+      const plan = workoutData.plannedWorkouts.find(
+        (plan) => plan.id === planId
+      );
       if (!plan) return;
 
       const updatedPlan: WorkoutPlan = { ...plan, name };
@@ -73,39 +81,49 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
-  
+
     setExercises((prev) => {
       const updatedExercises = [...prev, newExercise];
-  
+
       if (isEditing) {
-        const updatedPlan = workoutData.plannedWorkouts.find(plan => plan.id === planId);
+        const updatedPlan = workoutData.plannedWorkouts.find(
+          (plan) => plan.id === planId
+        );
         if (updatedPlan) {
           const newPlan = { ...updatedPlan, exercises: updatedExercises };
           editWorkout(planId, newPlan);
         }
       }
-  
+
       return updatedExercises;
     });
   }
 
-function handleEditExercise(index: number, updatedExercise: Exercise) {
-  const updatedExercises = [...exercises];
-  updatedExercises[index] = { ...updatedExercises[index], ...updatedExercise };
-  setExercises(updatedExercises);
+  function handleEditExercise(index: number, updatedExercise: Exercise) {
+    const updatedExercises = [...exercises];
+    updatedExercises[index] = {
+      ...updatedExercises[index],
+      ...updatedExercise,
+    };
+    setExercises(updatedExercises);
 
-  if (isEditing) {
-    const updatedPlan = workoutData.plannedWorkouts.find(plan => plan.id === planId);
-    if (updatedPlan) {
-      const updatedPlanExercises = updatedPlan.exercises.map((exercise: Exercise) =>
-        exercise.id === updatedExercise.id ? { ...exercise, ...updatedExercise } : exercise
+    if (isEditing) {
+      const updatedPlan = workoutData.plannedWorkouts.find(
+        (plan) => plan.id === planId
       );
+      if (updatedPlan) {
+        const updatedPlanExercises = updatedPlan.exercises.map(
+          (exercise: Exercise) =>
+            exercise.id === updatedExercise.id
+              ? { ...exercise, ...updatedExercise }
+              : exercise
+        );
 
-      const newPlan = { ...updatedPlan, exercises: updatedPlanExercises };
-      editWorkout(planId, newPlan);
+        const newPlan = { ...updatedPlan, exercises: updatedPlanExercises };
+        editWorkout(planId, newPlan);
+      }
     }
   }
-}
 
   function handleRemoveExercise(index: number) {
     setExercises((prev) => prev.filter((_, i) => i !== index));
@@ -124,7 +142,7 @@ function handleEditExercise(index: number, updatedExercise: Exercise) {
     };
 
     if (isCreating) {
-      exercises.forEach(exercise => addExercise(exercise));
+      exercises.forEach((exercise) => addExercise(exercise));
       addWorkout(updatedWorkoutPlan);
       alert("Workout plan added successfully!");
       navigate("/workout");
@@ -134,7 +152,9 @@ function handleEditExercise(index: number, updatedExercise: Exercise) {
   function toggleMode(index: number) {
     setExercises((prev) =>
       prev.map((exercise, i) =>
-        i === index ? { ...exercise, type: exercise.type === "reps" ? "time" : "reps" } : exercise
+        i === index
+          ? { ...exercise, type: exercise.type === "reps" ? "time" : "reps" }
+          : exercise
       )
     );
   }
@@ -176,14 +196,24 @@ function handleEditExercise(index: number, updatedExercise: Exercise) {
                   <input
                     type="number"
                     value={exercise.min > 0 ? exercise.min : ""}
-                    onChange={(e) => handleEditExercise(index, { ...exercise, min: Number(e.target.value) })}
+                    onChange={(e) =>
+                      handleEditExercise(index, {
+                        ...exercise,
+                        min: Number(e.target.value),
+                      })
+                    }
                     className="bg-zinc-700 flex rounded-md p-0.5 w-6 h-9 text-right"
                   />
                   <span>:</span>
                   <input
                     type="number"
                     value={exercise.sec > 0 ? exercise.sec : ""}
-                    onChange={(e) => handleEditExercise(index, { ...exercise, sec: Number(e.target.value) })}
+                    onChange={(e) =>
+                      handleEditExercise(index, {
+                        ...exercise,
+                        sec: Number(e.target.value),
+                      })
+                    }
                     className="bg-zinc-700 flex rounded-md p-0.5 w-6 h-9 text-right"
                   />
                 </>
@@ -192,7 +222,12 @@ function handleEditExercise(index: number, updatedExercise: Exercise) {
                   <input
                     type="number"
                     value={exercise.reps > 0 ? exercise.reps : ""}
-                    onChange={(e) => handleEditExercise(index, { ...exercise, reps: Number(e.target.value) })}
+                    onChange={(e) =>
+                      handleEditExercise(index, {
+                        ...exercise,
+                        reps: Number(e.target.value),
+                      })
+                    }
                     className="bg-zinc-700 flex rounded-md p-1.5 w-8 text-right appearance-none"
                   />
                   <span>x</span>
@@ -202,7 +237,12 @@ function handleEditExercise(index: number, updatedExercise: Exercise) {
               <input
                 type="text"
                 value={exercise.name}
-                onChange={(e) => handleEditExercise(index, { ...exercise, name: e.target.value })}
+                onChange={(e) =>
+                  handleEditExercise(index, {
+                    ...exercise,
+                    name: e.target.value,
+                  })
+                }
                 placeholder="Name exercises"
                 className="bg-zinc-700 rounded-md p-1.5 min-w-24 w-full"
               />
@@ -212,48 +252,65 @@ function handleEditExercise(index: number, updatedExercise: Exercise) {
                   <input
                     type="number"
                     value={exercise.kg > 0 ? exercise.kg : ""}
-                    onChange={(e) => handleEditExercise(index, { ...exercise, kg: Number(e.target.value) })}
+                    onChange={(e) =>
+                      handleEditExercise(index, {
+                        ...exercise,
+                        kg: Number(e.target.value),
+                      })
+                    }
                     className="bg-zinc-700 flex rounded-md p-1.5 max-w-10 text-right"
                   />
                   <span>kg</span>
                 </>
               )}
 
-              <div className="flex items-center text-red-500" onClick={() => handleRemoveExercise(index)}>
+              <div
+                className="flex items-center text-red-500"
+                onClick={() => handleRemoveExercise(index)}
+              >
                 <X />
               </div>
             </div>
           </div>
         ))}
 
-        <Button onClick={handleAddExercise} type="button" className="bg-zinc-700 text-zinc-400 flex justify-center p-2 rounded-md">
+        <Button
+          onClick={handleAddExercise}
+          type="button"
+          className="bg-zinc-700 text-zinc-400 flex justify-center p-2 rounded-md"
+        >
           <Plus />
           <span>Add exercise</span>
         </Button>
 
         {isCreating && (
           <div className="flex justify-end">
-            <Button className="bg-green-600 text-zinc-800 rounded-full p-2" type="submit">
+            <Button
+              className="bg-green-600 text-zinc-800 rounded-full p-2"
+              type="submit"
+            >
               <Check />
             </Button>
           </div>
         )}
       </form>
     </Card>
+  ) : isWorking ? (
+    <Card onClick={handleEditPlan} className="flex flex-col gap-3 p-2">
+      <strong className="text-xl font-normal">{title}</strong>
+      {exercises.map((exercise) => (
+        <WorkoutLine key={exercise.id} data={exercise} readonly checkbox />
+      ))}
+    </Card>
   ) : (
-    isWorking ?
-      <Card onClick={handleEditPlan} className="flex flex-col gap-3 p-2">
-        <strong className="text-xl font-normal">{title}</strong>
-        {exercises.map((exercise) => (
-          <WorkoutLine key={exercise.id} data={exercise} readonly checkbox />
-        ))}
-      </Card>
-    :
-      <Card onClick={handleEditPlan} className="flex flex-col gap-3 p-2 cursor-pointer">
-        <strong className="text-xl font-normal">{title}</strong>
-        {exercises.map((exercise) => (
-          <WorkoutLine key={exercise.id} data={exercise} readonly />
-        ))}
-      </Card>
+    <Card
+      onClick={handleEditPlan}
+      className="flex flex-col gap-3 p-2 cursor-pointer"
+    >
+      <strong className="text-xl font-normal">{title}</strong>
+      {exercises.map((exercise) => (
+        <WorkoutLine key={exercise.id} data={exercise} readonly />
+      ))}
+    </Card>
   );
 }
