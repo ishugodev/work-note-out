@@ -16,7 +16,7 @@ export function NavigatorBar() {
   return (
     <div className="flex justify-center">
       <ToggleGroup.Root
-        className="bg-zinc-800 p-3 rounded-xl flex gap-4 max-w-fit fixed bottom-10 shadow-[0_0_12px_2px_rgba(0,0,0,0.2)]"
+        className="fixed bottom-10 flex max-w-fit gap-4 rounded-xl bg-zinc-200 p-3 shadow-[0_0_12px_2px_rgba(0,0,0,0.2)] dark:bg-zinc-800"
         type="single"
         value={location.pathname}
         onValueChange={(value) => {
@@ -28,7 +28,7 @@ export function NavigatorBar() {
         {navItems.map((item) => (
           <ToggleGroup.Item
             key={item.value}
-            className="bg-zinc-700 text-zinc-400 p-3 rounded-lg data-[state=on]:bg-zinc-900 data-[state=on]:text-zinc-100"
+            className="rounded-lg bg-zinc-300 p-3 text-zinc-400 data-[state=on]:bg-zinc-100 data-[state=on]:text-zinc-900 dark:bg-zinc-700 dark:text-zinc-400 dark:data-[state=on]:bg-zinc-900 dark:data-[state=on]:text-zinc-100"
             value={item.value}
             aria-label={item.label}
           >

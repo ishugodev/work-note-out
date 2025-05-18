@@ -73,21 +73,23 @@ export function Workout() {
   };
 
   return (
-    <div className="p-5 min-h-screen bg-zinc-100 text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
-      <div id="workout" className="mt-8 max-w-screen-lg mx-auto mb-32">
-        <h1 className="text-2xl mb-4 font-semibold">Workout</h1>
+    <div className="min-h-screen bg-zinc-100 p-5 text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
+      <div id="workout" className="mx-auto mb-32 mt-8 max-w-screen-lg">
+        <h1 className="mb-4 text-2xl font-semibold">Workout</h1>
 
-        <p className="text-zinc-500 mb-2 dark:text-zinc-400">Week plans</p>
+        <p className="mb-2 font-medium text-zinc-600 dark:text-zinc-400">
+          Week plans
+        </p>
         <div className="grid gap-3">
           {workoutData.weeklyPlans.length > 0 ? (
             workoutData.weeklyPlans.map((plan, index) => {
               return (
                 <div key={plan.id}>
                   {workoutData.weeklyPlans.length > 1 && (
-                    <div className="flex justify-between items-center mb-2">
+                    <div className="mb-2 flex items-center justify-between">
                       <p>{index + 1}º week</p>
                       <Button
-                        className="text-red-500 cursor-pointer"
+                        className="cursor-pointer font-medium text-red-600 dark:text-red-500"
                         onClick={() => handleRemoveWeeklyPlan(plan.id)}
                       >
                         delete week
@@ -113,14 +115,14 @@ export function Workout() {
         </div>
 
         <Button
-          className="flex justify-center items-center gap-2 w-full px-3 py-2 mt-4 bg-zinc-800 text-zinc-400 rounded-xl"
+          className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-zinc-200 px-3 py-2 font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-400"
           onClick={handleAddWeeklyPlan}
         >
           <Plus size={16} />
           <span>Add week</span>
         </Button>
 
-        <p className="text-zinc-500 mt-6 mb-4 dark:text-zinc-400">
+        <p className="mb-4 mt-6 font-medium text-zinc-500 dark:text-zinc-400">
           Workout plan
         </p>
 
@@ -137,7 +139,7 @@ export function Workout() {
         </div>
 
         <Button
-          className="flex justify-center items-center gap-2 w-full px-3 py-2 mt-6 bg-zinc-800 text-zinc-400 rounded-xl"
+          className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-zinc-200 px-3 font-medium py-2 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-400"
           asChild
         >
           <Link to="/workout/addplan">

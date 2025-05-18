@@ -28,14 +28,18 @@ export function EditPlan() {
   }
 
   return (
-    <div className="min-h-screen max-h-full p-5 bg-zinc-100 text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
-
+    <div className="max-h-full min-h-screen bg-zinc-100 p-5 text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
       <div className="flex justify-between">
         <GoBack />
-        <Button className="text-red-500" onClick={handleDelete}>Delete this plan</Button>
+        <Button
+          className="text-red-600 dark:text-red-500"
+          onClick={handleDelete}
+        >
+          Delete this plan
+        </Button>
       </div>
-      <div id="editPlan" className="mt-6 mb-32">
-        <h1 className="text-2xl mb-4">Edit workout plan</h1>
+      <div id="editPlan" className="mb-32 mt-6">
+        <h1 className="mb-4 text-2xl">Edit workout plan</h1>
 
         {planId && <WorkoutPlan key={planId} mode="edit" planId={planId} />}
 

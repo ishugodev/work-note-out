@@ -13,10 +13,10 @@ export function AddPlan() {
   }, []);
 
   return (
-    <div className="min-h-screen max-h-full p-5 bg-zinc-100 text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
+    <div className="max-h-full min-h-screen bg-zinc-100 p-5 text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
       <GoBack url="/workout" />
-      <div id="addPlan" className="mt-8 mb-32">
-        <h1 className="text-2xl mb-4">Add workout plan</h1>
+      <div id="addPlan" className="mb-32 mt-8">
+        <h1 className="mb-4 text-2xl">Add workout plan</h1>
         
         <WorkoutPlan planId={nextPlanId} mode="create" />
       </div>

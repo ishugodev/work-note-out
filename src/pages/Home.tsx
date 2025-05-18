@@ -31,10 +31,10 @@ export function Home() {
   }, [workoutData]);
 
   return (
-    <div className="min-h-screen max-h-full p-5 bg-zinc-100 text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
-      <div className="mt-8 mb-32">
-        <h1 className="text-2xl mb-4">Your workout</h1>
-        <p className="text-zinc-500 mb-2 dark:text-zinc-400">
+    <div className="max-h-full min-h-screen bg-zinc-100 p-5 text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
+      <div className="mb-32 mt-8">
+        <h1 className="mb-4 text-2xl font-semibold">Your workout</h1>
+        <p className="mb-2 text-zinc-500 font-medium dark:text-zinc-400">
           <span>
             {new Intl.DateTimeFormat("en-US", { weekday: "long" }).format(
               new Date()

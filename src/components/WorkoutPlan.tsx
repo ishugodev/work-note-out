@@ -167,14 +167,14 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
 
   return isCreating || isEditing ? (
     <Card className="p-2">
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3 w-full">
-        <label htmlFor="planName" className="text-zinc-400">
+      <form onSubmit={handleSubmit} className="flex w-full flex-col gap-3">
+        <label htmlFor="planName" className="dark:text-zinc-400">
           Workout plan name
         </label>
         <input
           id="planName"
           type="text"
-          className="bg-zinc-700 rounded-md p-1.5"
+          className="rounded-md bg-zinc-100 p-1.5 dark:bg-zinc-700"
           value={title}
           onChange={(e) => handleEditPlanName(e.target.value)}
           required
@@ -187,10 +187,10 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
               icon2={<Timer />}
               mode={exercise.type}
               onClick={() => toggleMode(index)}
-              className="bg-zinc-700 p-1.5 rounded-full"
+              className="rounded-full bg-zinc-100 p-1.5 dark:bg-zinc-700"
             />
 
-            <div className="flex items-center gap-0.5 w-full">
+            <div className="flex w-full items-center gap-0.5">
               {exercise.type === "time" ? (
                 <>
                   <input
@@ -202,7 +202,7 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
                         min: Number(e.target.value),
                       })
                     }
-                    className="bg-zinc-700 flex rounded-md p-0.5 w-6 h-9 text-right"
+                    className="flex h-9 w-6 rounded-md bg-zinc-100 p-0.5 text-right dark:bg-zinc-700"
                   />
                   <span>:</span>
                   <input
@@ -214,7 +214,7 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
                         sec: Number(e.target.value),
                       })
                     }
-                    className="bg-zinc-700 flex rounded-md p-0.5 w-6 h-9 text-right"
+                    className="flex h-9 w-6 rounded-md bg-zinc-100  p-0.5 text-right dark:bg-zinc-700"
                   />
                 </>
               ) : (
@@ -228,7 +228,7 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
                         reps: Number(e.target.value),
                       })
                     }
-                    className="bg-zinc-700 flex rounded-md p-1.5 w-8 text-right appearance-none"
+                    className="flex w-8 appearance-none rounded-md bg-zinc-100 p-1.5 text-right dark:bg-zinc-700"
                   />
                   <span>x</span>
                 </>
@@ -244,7 +244,7 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
                   })
                 }
                 placeholder="Name exercises"
-                className="bg-zinc-700 rounded-md p-1.5 min-w-24 w-full"
+                className="w-full min-w-24 rounded-md bg-zinc-100 p-1.5 dark:bg-zinc-700"
               />
 
               {exercise.type !== "time" && (
@@ -258,14 +258,14 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
                         kg: Number(e.target.value),
                       })
                     }
-                    className="bg-zinc-700 flex rounded-md p-1.5 max-w-10 text-right"
+                    className="flex max-w-10 rounded-md bg-zinc-100 p-1.5 text-right dark:bg-zinc-700"
                   />
                   <span>kg</span>
                 </>
               )}
 
               <div
-                className="flex items-center text-red-500"
+                className="flex cursor-pointer items-center text-red-600 dark:text-red-500"
                 onClick={() => handleRemoveExercise(index)}
               >
                 <X />
@@ -277,7 +277,7 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
         <Button
           onClick={handleAddExercise}
           type="button"
-          className="bg-zinc-700 text-zinc-400 flex justify-center p-2 rounded-md"
+          className="flex justify-center rounded-md bg-zinc-100 p-2 dark:bg-zinc-700 dark:text-zinc-400"
         >
           <Plus />
           <span>Add exercise</span>
@@ -286,7 +286,7 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
         {isCreating && (
           <div className="flex justify-end">
             <Button
-              className="bg-green-600 text-zinc-800 rounded-full p-2"
+              className="rounded-full bg-green-400 p-2 text-zinc-100 dark:bg-green-600 dark:text-zinc-800"
               type="submit"
             >
               <Check />
@@ -297,7 +297,9 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
     </Card>
   ) : isWorking ? (
     <Card onClick={handleEditPlan} className="flex flex-col gap-3 p-2">
-      <strong className="text-xl font-normal">{title}</strong>
+      <strong className="hyphens-auto break-all text-xl font-normal">
+        {title}
+      </strong>
       {exercises.map((exercise) => (
         <WorkoutLine key={exercise.id} data={exercise} readonly checkbox />
       ))}
@@ -305,9 +307,11 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
   ) : (
     <Card
       onClick={handleEditPlan}
-      className="flex flex-col gap-3 p-2 cursor-pointer"
+      className="flex cursor-pointer flex-col gap-3 p-2"
     >
-      <strong className="text-xl font-normal">{title}</strong>
+      <strong className="hyphens-auto break-all text-xl font-normal">
+        {title}
+      </strong>
       {exercises.map((exercise) => (
         <WorkoutLine key={exercise.id} data={exercise} readonly />
       ))}
