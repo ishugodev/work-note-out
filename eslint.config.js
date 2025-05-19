@@ -2,6 +2,7 @@
 import pluginJs from "@eslint/js";
 import pluginImport from 'eslint-plugin-import';
 import pluginReact from "eslint-plugin-react";
+import eslintPluginTailwindcss from 'eslint-plugin-tailwindcss'
 import React from "react";
 import tseslint from "typescript-eslint";
 
@@ -23,7 +24,8 @@ export default [
     },
     plugins: { 
       React,
-      import: pluginImport
+      import: pluginImport,
+      tailwindcss: eslintPluginTailwindcss,
     },
     settings: {
       react: {
@@ -33,6 +35,7 @@ export default [
     rules: {
       'react/react-in-jsx-scope': 'off',
       'react/jsx-uses-react': 'off',
+      'tailwindcss/classnames-order': 'warn',
       'import/order': [
         'warn',
         {

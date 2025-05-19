@@ -139,7 +139,7 @@ export function Workout() {
         </div>
 
         <Button
-          className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-zinc-200 px-3 font-medium py-2 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-400"
+          className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-zinc-200 px-3 py-2 font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-400"
           asChild
         >
           <Link to="/workout/addplan">

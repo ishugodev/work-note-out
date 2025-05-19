@@ -32,9 +32,9 @@ export function Home() {
 
   return (
     <div className="max-h-full min-h-screen bg-zinc-100 p-5 text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
-      <div className="mb-32 mt-8">
+      <div className="mx-auto mb-32 mt-8 max-w-screen-lg">
         <h1 className="mb-4 text-2xl font-semibold">Your workout</h1>
-        <p className="mb-2 text-zinc-500 font-medium dark:text-zinc-400">
+        <p className="mb-2 font-medium text-zinc-500 dark:text-zinc-400">
           <span>
             {new Intl.DateTimeFormat("en-US", { weekday: "long" }).format(
               new Date()
