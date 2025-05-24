@@ -27,6 +27,7 @@ const useWorkout = () => {
       },
     ],
     currentIndexWeek: 0,
+    checkedTodayWorkouts: [],
   });
 
   const saveDataToLocalStorage = (data: WorkoutData) => {
@@ -56,6 +57,7 @@ const useWorkout = () => {
           },
         ],
         currentIndexWeek: 0,
+        checkedTodayWorkouts: [],
       };
   
       saveDataToLocalStorage(initialData);
@@ -65,6 +67,21 @@ const useWorkout = () => {
   useEffect(() => {
     loadDataFromLocalStorage();
   }, []);
+
+  const toggleExerciseCheck = (exerciseId: string) => {
+    const isChecked = workoutData.checkedTodayWorkouts.includes(exerciseId);
+
+    const updatedChecked = isChecked
+    ? workoutData.checkedTodayWorkouts.filter(id => id !== exerciseId)
+    : [...workoutData.checkedTodayWorkouts, exerciseId];
+
+    const updatedData = {
+      ...workoutData,
+      checkedTodayWorkouts: updatedChecked,
+    };
+
+    saveDataToLocalStorage(updatedData); 
+  }
 
   const addExercise = (exercise: Exercise) => {
     const updatedData = { ...workoutData, exercises: [...workoutData.exercises, exercise] };
@@ -199,6 +216,7 @@ const useWorkout = () => {
     addWeeklyPlan,
     editWeeklyPlan,
     removeWeeklyPlan,
+    toggleExerciseCheck,
   };
 };
 

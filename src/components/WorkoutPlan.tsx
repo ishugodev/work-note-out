@@ -10,15 +10,20 @@ import { Card } from "./Card";
 import { ModeToggle } from "./ModeToggle";
 import { WorkoutLine } from "./WorkoutLine";
 
-
 interface WorkoutPlanProps {
   mode: "create" | "edit" | "view" | "working";
   planId: string;
 }
 
 export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
-  const { workoutData, addExercise, removeExercise, addWorkout, editWorkout } =
-    useWorkout();
+  const {
+    workoutData,
+    addExercise,
+    removeExercise,
+    addWorkout,
+    editWorkout,
+    toggleExerciseCheck,
+  } = useWorkout();
   const [title, setTitle] = useState("");
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const navigate = useNavigate();
@@ -301,7 +306,14 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
         {title}
       </strong>
       {exercises.map((exercise) => (
-        <WorkoutLine key={exercise.id} data={exercise} readonly checkbox />
+        <WorkoutLine
+          key={exercise.id}
+          data={exercise}
+          readonly
+          checkbox
+          isChecked={workoutData.checkedTodayWorkouts.includes(exercise.id)}
+          onCheckedChange={() => toggleExerciseCheck(exercise.id)}
+        />
       ))}
     </Card>
   ) : (

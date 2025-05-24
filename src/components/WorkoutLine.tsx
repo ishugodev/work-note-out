@@ -1,17 +1,15 @@
-
 import * as Checkbox from "@radix-ui/react-checkbox";
 import { Check } from "lucide-react";
-import { useState } from "react";
 
 interface WorkoutLineProps {
   data: Exercise;
   readonly?: boolean;
   checkbox?: boolean;
+  isChecked?: boolean;
+  onCheckedChange?: () => void;
 }
 
 export function WorkoutLine(props: WorkoutLineProps) {
-  const [checked, setChecked] = useState(false);
-
   const isTimeMode = props.data.type === "time";
   const formatTime = (time: number) => time.toString().padStart(2, "0");
 
@@ -19,8 +17,8 @@ export function WorkoutLine(props: WorkoutLineProps) {
     <div className="flex items-center gap-2 text-sm">
       {props.checkbox && (
         <Checkbox.Root
-          checked={checked}
-          onCheckedChange={(checked) => setChecked(!!checked)}
+          checked={props.isChecked}
+          onCheckedChange={props.onCheckedChange}
           className="flex h-5 w-5 items-center justify-center rounded border border-zinc-600 data-[state=checked]:bg-zinc-600 dark:border-zinc-500 dark:data-[state=checked]:bg-zinc-500"
         >
           <Checkbox.Indicator className="p-1 text-zinc-100">
@@ -31,7 +29,7 @@ export function WorkoutLine(props: WorkoutLineProps) {
 
       <div
         className={`relative flex-1 ${
-          checked
+          props.isChecked
             ? "text-zinc-400 after:pointer-events-none after:absolute after:left-0 after:top-1/2 after:h-[2px] after:w-full after:-translate-y-1/2 after:bg-zinc-600 after:content-[''] dark:text-zinc-600 dark:after:bg-zinc-500"
             : ""
         }`}

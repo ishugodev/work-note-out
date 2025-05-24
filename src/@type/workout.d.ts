@@ -13,6 +13,8 @@ declare global {
     updatedAt: string;
   };
 
+  type CheckedTodayWorkouts = string[];
+
   type WorkoutPlan = {
     id: string;
     name: string;
@@ -42,6 +44,7 @@ declare global {
     plannedWorkouts: WorkoutPlan[];
     weeklyPlans: WeeklyPlan[];
     currentIndexWeek: number;
+    checkedTodayWorkouts: CheckedTodayWorkouts;
   };
 }
 
