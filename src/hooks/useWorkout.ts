@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from "uuid";
 
+import { OLD_LOCAL_STORAGE_KEY, NEW_LOCAL_STORAGE_KEY } from '@/config/keys';
+
 const getCurrentIndexWeek = (weeklyPlans: WeeklyPlan[]) => {
   if (weeklyPlans.length < 1) return 0;
 
@@ -27,25 +29,47 @@ const useWorkout = () => {
       },
     ],
     currentIndexWeek: 0,
-    checkedTodayWorkouts: [],
+    checkedTodayWorkouts: {},
   });
 
   const saveDataToLocalStorage = (data: WorkoutData) => {
     setWorkoutData(data);
-    localStorage.setItem('@myworkoutapp', JSON.stringify(data));
+    localStorage.setItem(NEW_LOCAL_STORAGE_KEY, JSON.stringify(data));
   };
 
   const loadDataFromLocalStorage = () => {
-    const storedData = localStorage.getItem('@myworkoutapp');
-  
-    if (storedData) {
-      const parsedData = JSON.parse(storedData);
+    const oldKey = OLD_LOCAL_STORAGE_KEY;
+    const newKey = NEW_LOCAL_STORAGE_KEY;
+
+    const oldData = localStorage.getItem(oldKey);
+
+    if (oldData) {
+      const parsedData = JSON.parse(oldData);
+      
+      parsedData.currentIndexWeek = getCurrentIndexWeek(parsedData.weeklyPlans);
+
+      localStorage.setItem(newKey, JSON.stringify(parsedData));
+      localStorage.removeItem(oldKey);
+
+      saveDataToLocalStorage(parsedData);
+    }
+
+    const newData = localStorage.getItem(newKey);
+
+    const today = new Date().toISOString().slice(0, 10);
+
+    if (newData) {
+      const parsedData = JSON.parse(newData);
 
       parsedData.currentIndexWeek = getCurrentIndexWeek(parsedData.weeklyPlans);
 
+      if (!parsedData.checkedTodayWorkouts[today]) {
+        parsedData.checkedTodayWorkouts[today] = [];
+      }
+
       saveDataToLocalStorage(parsedData);
     } else {
-      const initialData: WorkoutData = {
+      const initialData = {
         exercises: [],
         plannedWorkouts: [],
         weeklyPlans: [
@@ -57,9 +81,9 @@ const useWorkout = () => {
           },
         ],
         currentIndexWeek: 0,
-        checkedTodayWorkouts: [],
+        checkedTodayWorkouts: {},
       };
-  
+
       saveDataToLocalStorage(initialData);
     }
   };
@@ -69,15 +93,21 @@ const useWorkout = () => {
   }, []);
 
   const toggleExerciseCheck = (exerciseId: string) => {
-    const isChecked = workoutData.checkedTodayWorkouts.includes(exerciseId);
+    const today = new Date().toISOString().slice(0, 10);
+    const todayChecked = workoutData.checkedTodayWorkouts[today] || [];
+
+    const isChecked = todayChecked.includes(exerciseId);
 
     const updatedChecked = isChecked
-    ? workoutData.checkedTodayWorkouts.filter(id => id !== exerciseId)
-    : [...workoutData.checkedTodayWorkouts, exerciseId];
+    ? todayChecked.filter(id => id !== exerciseId)
+    : [...todayChecked, exerciseId];
 
     const updatedData = {
       ...workoutData,
-      checkedTodayWorkouts: updatedChecked,
+      checkedTodayWorkouts: {
+        ...workoutData.checkedTodayWorkouts,
+        [today]: updatedChecked,
+      },
     };
 
     saveDataToLocalStorage(updatedData); 

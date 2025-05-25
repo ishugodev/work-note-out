@@ -13,7 +13,9 @@ declare global {
     updatedAt: string;
   };
 
-  type CheckedTodayWorkouts = string[];
+  type CheckedTodayWorkouts = {
+    [date: string]: string[];
+  };
 
   type WorkoutPlan = {
     id: string;

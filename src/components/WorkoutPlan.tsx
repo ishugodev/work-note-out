@@ -311,7 +311,11 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
           data={exercise}
           readonly
           checkbox
-          isChecked={workoutData.checkedTodayWorkouts.includes(exercise.id)}
+          isChecked={
+            workoutData.checkedTodayWorkouts[
+              new Date().toISOString().split("T")[0]
+            ]?.includes(exercise.id) || false
+          }
           onCheckedChange={() => toggleExerciseCheck(exercise.id)}
         />
       ))}
