@@ -45,7 +45,7 @@ function ModalContent(props: ModalContentProps) {
     <Dialog.Portal>
       <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-70" />
       <Dialog.Content
-        className="fixed inset-0 m-auto h-fit w-[calc(100%-2rem)] rounded-lg bg-zinc-200 p-2 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-100"
+        className="fixed inset-0 m-auto h-fit w-[calc(100%-2rem)] max-w-screen-sm rounded-lg bg-zinc-200 p-2 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-100"
         aria-describedby={undefined}
       >
         {props.children}
