@@ -19,7 +19,7 @@ export function WorkoutLine(props: WorkoutLineProps) {
         <Checkbox.Root
           checked={props.isChecked}
           onCheckedChange={props.onCheckedChange}
-          className="flex h-5 w-5 items-center justify-center rounded border border-zinc-600 data-[state=checked]:bg-zinc-600 dark:border-zinc-500 dark:data-[state=checked]:bg-zinc-500"
+          className="flex h-5 w-5 items-center justify-center rounded border border-zinc-500 data-[state=checked]:bg-zinc-500"
         >
           <Checkbox.Indicator className="p-1 text-zinc-100">
             <Check className="h-4 w-4" />
@@ -30,7 +30,7 @@ export function WorkoutLine(props: WorkoutLineProps) {
       <div
         className={`relative flex-1 ${
           props.isChecked
-            ? "text-zinc-400 after:pointer-events-none after:absolute after:left-0 after:top-1/2 after:h-[2px] after:w-full after:-translate-y-1/2 after:bg-zinc-600 after:content-[''] dark:text-zinc-600 dark:after:bg-zinc-500"
+            ? "text-zinc-500 after:pointer-events-none after:absolute after:left-0 after:top-1/2 after:h-[1px] after:w-full after:-translate-y-1/2 after:bg-zinc-500 after:content-['']"
             : ""
         }`}
       >

@@ -58,7 +58,36 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				}
-			}
+			},
+			keyframes: {
+				pageFadeIn: {
+					'0%': { opacity: '0', transform: 'translateY(15px)' },
+					'100%': { opacity: '1', transform: 'translateY(0)' },
+				},
+				fadeIn: {
+					'0%': { opacity: '0' },
+					'100%': { opacity: '1' },
+				},
+				fadeOut: {
+					'0%': { opacity: '1' },
+					'100%': { opacity: '0' },
+				},
+				slideIn: {
+					'0%': { transform: 'translateX(-100%)' },
+					'100%': { transform: 'translateX(0)' },
+				},
+				slideOut: {
+					'0%': { transform: 'translateX(0)' },
+					'100%': { transform: 'translateX(-100%)' },
+				},
+			},
+			animation: {
+				pageFadeIn: 'pageFadeIn 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards',
+				fadeIn: 'fadeIn 0.3s ease forwards',
+				fadeOut: 'fadeOut 0.2s ease forwards',
+				slideIn: 'slideIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards',
+     			slideOut: 'slideOut 0.2s cubic-bezier(0.55, 0, 0.55, 0.2) forwards',
+			},
 		}
 	},
 	plugins: [require("tailwindcss-animate")],
