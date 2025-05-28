@@ -7,7 +7,7 @@ type WorkoutContentProps = {
 export function WorkoutContent(props: WorkoutContentProps) {
   return (
     <a className="flex gap-3">
-      <img src={props.gifUrl} className="w-20 h-20 object-contain rounded-md" />
+      <img src={props.gifUrl} className="h-20 w-20 rounded-md object-contain" />
 
       <div className="flex flex-col justify-between">
         <span className="">{props.name}</span>

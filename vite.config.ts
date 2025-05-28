@@ -16,7 +16,7 @@ export default defineConfig({
       },
       manifest: {
         name: 'Work Note Out',
-        short_name: 'WorkNoteOut',
+        short_name: 'Work Note Out',
         start_url: '.',
         display: 'standalone',
         background_color: '#ffffff',

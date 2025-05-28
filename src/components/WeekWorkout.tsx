@@ -70,7 +70,7 @@ export function WeekWorkout({
                     return (
                       <Card
                         key={workout.id}
-                        className={`flex cursor-pointer justify-between rounded-lg text-zinc-800 dark:text-zinc-100 bg-zinc-300 p-1.5 dark:bg-zinc-700`}
+                        className={`flex cursor-pointer justify-between rounded-lg bg-zinc-300 p-1.5 text-zinc-800 dark:bg-zinc-700 dark:text-zinc-100`}
                         onClick={() => handleToggleWorkout(day, workout.id)}
                       >
                         <p className="w-4/5 break-words">{workout.name}</p>

@@ -4,14 +4,14 @@ import React from "react";
 
 interface CardProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-  aschild?: boolean;
+  asChild?: boolean;
 }
 
 export function Card(props: CardProps) {
-  const Component = props.aschild ? Slot : RadixCard;
+  const Component = props.asChild ? Slot : RadixCard;
 
   return (
-    <Box className="bg-zinc-200 text-zinc-900 rounded-xl dark:bg-zinc-800 dark:text-zinc-100">
+    <Box className="rounded-xl bg-zinc-200 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
       <Component {...props}>{props.children}</Component>
     </Box>
   );
