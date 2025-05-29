@@ -128,7 +128,21 @@ const useWorkout = () => {
 
   const removeExercise = (exerciseId: string) => {
     const updatedExercises = workoutData.exercises.filter((ex) => ex.id !== exerciseId);
-    const updatedData = { ...workoutData, exercises: updatedExercises };
+
+    const updatedPlannedWorkouts = workoutData.plannedWorkouts.map((workout) => {
+      const updatedWorkoutExercises = workout.exercises.filter((ex) => ex.id !== exerciseId);
+      return {
+        ...workout,
+        exercises: updatedWorkoutExercises,
+      };
+    });
+
+    const updatedData = {
+      ...workoutData,
+      exercises: updatedExercises,
+      plannedWorkouts: updatedPlannedWorkouts,
+    };
+    
     saveDataToLocalStorage(updatedData);
   };
 

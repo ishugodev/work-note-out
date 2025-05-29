@@ -1,4 +1,18 @@
-import { Check, Plus, Repeat2, Timer, X } from "lucide-react";
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import {
+  SortableContext,
+  arrayMove,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { Check, Plus } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
@@ -7,7 +21,7 @@ import useWorkout from "@/hooks/useWorkout";
 
 import { Button } from "./Button";
 import { Card } from "./Card";
-import { ModeToggle } from "./ModeToggle";
+import { SortableExerciseItem } from "./SortableExerciseItem";
 import { WorkoutLine } from "./WorkoutLine";
 
 interface WorkoutPlanProps {
@@ -32,6 +46,8 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
   const isEditing = mode === "edit";
   const isViewing = mode === "view";
   const isWorking = mode === "working";
+
+  const sensors = useSensors(useSensor(PointerSensor));
 
   useEffect(() => {
     if (!isCreating) {
@@ -170,6 +186,29 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
     }
   }
 
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = exercises.findIndex((item) => item.id === active.id);
+    const newIndex = exercises.findIndex((item) => item.id === over.id);
+
+    if (oldIndex !== -1 && newIndex !== -1) {
+      const newExercises = arrayMove(exercises, oldIndex, newIndex);
+      setExercises(newExercises);
+
+      if (isEditing) {
+        const plan = workoutData.plannedWorkouts.find(
+          (plan) => plan.id === planId
+        );
+        if (plan) {
+          const newPlan = { ...plan, exercises: newExercises };
+          editWorkout(planId, newPlan);
+        }
+      }
+    }
+  }
+
   return isCreating || isEditing ? (
     <Card className="p-2">
       <form onSubmit={handleSubmit} className="flex w-full flex-col gap-3">
@@ -185,16 +224,32 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
           required
         />
 
-        {exercises.map((exercise, index) => (
-          <div className="flex gap-0.5" key={exercise.id}>
-            <ModeToggle
-              icon1={<Repeat2 />}
-              icon2={<Timer />}
-              mode={exercise.type}
-              onClick={() => toggleMode(index)}
-              className="rounded-full bg-zinc-100 p-1.5 dark:bg-zinc-700"
-            />
+        <DndContext
+          sensors={sensors}
+          modifiers={[restrictToVerticalAxis]}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={exercises.map((e) => e.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            {exercises.map((exercise, index) => (
+              <SortableExerciseItem
+                key={exercise.id}
+                id={exercise.id}
+                exercise={exercise}
+                index={index}
+                onEdit={handleEditExercise}
+                onRemove={handleRemoveExercise}
+                onToggleType={toggleMode}
+              />
+            ))}
+          </SortableContext>
+        </DndContext>
 
+        {/* {exercises.map((exercise, index) => (
+          <div className="flex gap-0.5" key={exercise.id}>
             <div className="flex w-full items-center gap-0.5">
               {exercise.type === "time" ? (
                 <>
@@ -269,15 +324,42 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
                 </>
               )}
 
-              <div
-                className="flex cursor-pointer items-center text-red-600 dark:text-red-500"
-                onClick={() => handleRemoveExercise(index)}
-              >
-                <X />
-              </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    type="button"
+                    className="rounded-full p-1.5 hover:bg-zinc-200 dark:hover:bg-zinc-600"
+                  >
+                    <Bolt className="h-5 w-5" />
+                  </button>
+                </DropdownMenuTrigger>
+
+                <DropdownMenuContent
+                  side="bottom"
+                  align="end"
+                  className="z-50 min-w-[150px] rounded-md bg-white p-1 shadow-md dark:bg-zinc-800"
+                >
+                  <DropdownMenuItem
+                    className="flex cursor-pointer items-center justify-between rounded px-2 py-1 text-sm text-zinc-900 hover:bg-zinc-200 dark:text-zinc-100 dark:hover:bg-zinc-700"
+                    onSelect={() => {
+                      toggleMode(index);
+                    }}
+                  >
+                    {exercise.type === "time"
+                      ? "Switch to reps"
+                      : "Switch to time"}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="cursor-pointer rounded px-2 py-1 text-sm text-red-600 hover:bg-zinc-200 dark:hover:bg-zinc-700"
+                    onClick={() => handleRemoveExercise(index)}
+                  >
+                    Delete exercise
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
-        ))}
+        ))} */}
 
         <Button
           onClick={handleAddExercise}
