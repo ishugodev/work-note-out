@@ -50,7 +50,7 @@ export function SortableExerciseItem({
           type="button"
           {...attributes}
           {...listeners}
-          className="cursor-grab"
+          className="cursor-grab touch-none"
         >
           <GripVertical className="h-6 w-6 text-zinc-600 dark:text-zinc-400" />
         </Button>
