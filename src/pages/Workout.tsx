@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { Button } from "@/components/Button";
 import { NavigatorBar } from "@/components/NavigatorBar";
+import { SideMenu } from "@/components/SideMenu";
 import { WeekWorkout } from "@/components/WeekWorkout";
 import { WorkoutPlan } from "@/components/WorkoutPlan";
 import useWorkout from "@/hooks/useWorkout";
@@ -78,6 +79,7 @@ export function Workout() {
         id="workout"
         className="mx-auto mb-32 mt-8 max-w-screen-sm animate-pageFadeIn"
       >
+        <SideMenu />
         <h1 className="mb-4 text-2xl font-semibold">Workout</h1>
 
         <p className="mb-2 font-medium text-zinc-600 dark:text-zinc-400">

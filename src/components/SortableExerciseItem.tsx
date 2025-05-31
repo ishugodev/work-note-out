@@ -9,6 +9,7 @@ import {
 import { Bolt, GripVertical } from "lucide-react";
 
 import { Button } from "./Button";
+import { NumberPicker } from "./NumberPicker";
 
 interface SortableExerciseItemProps {
   id: string;
@@ -44,8 +45,8 @@ export function SortableExerciseItem({
   };
 
   return (
-    <div ref={setNodeRef} style={style} className="flex gap-0.5">
-      <div className="flex w-full items-center gap-0.5">
+    <div ref={setNodeRef} style={style}>
+      <div className="flex w-full items-center gap-1">
         <Button
           type="button"
           {...attributes}
@@ -56,43 +57,48 @@ export function SortableExerciseItem({
         </Button>
 
         {exercise.type === "time" ? (
-          <>
-            <input
-              type="number"
-              value={exercise.min > 0 ? exercise.min : ""}
-              onChange={(e) =>
+          <div className="flex items-center gap-0.5">
+            <NumberPicker
+              min={0}
+              max={120}
+              value={exercise.min}
+              onValueChange={(value) =>
                 onEdit(index, {
                   ...exercise,
-                  min: Number(e.target.value),
+                  min: value,
                 })
               }
-              className="flex h-9 w-6 rounded-md bg-zinc-100 p-0.5 text-right dark:bg-zinc-700"
+              formatAsTime
+              className="flex h-9 w-8 rounded-md bg-zinc-100 p-1 text-right dark:bg-zinc-700"
             />
             <span>:</span>
-            <input
-              type="number"
-              value={exercise.sec > 0 ? exercise.sec : ""}
-              onChange={(e) =>
+            <NumberPicker
+              min={0}
+              max={59}
+              value={exercise.sec}
+              onValueChange={(value) =>
                 onEdit(index, {
                   ...exercise,
-                  sec: Number(e.target.value),
+                  sec: value,
                 })
               }
-              className="flex h-9 w-6 rounded-md bg-zinc-100 p-0.5 text-right dark:bg-zinc-700"
+              formatAsTime
+              className="flex h-9 w-8 rounded-md bg-zinc-100 p-1 text-right dark:bg-zinc-700"
             />
-          </>
+          </div>
         ) : (
           <>
-            <input
-              type="number"
-              value={exercise.reps > 0 ? exercise.reps : ""}
-              onChange={(e) =>
+            <NumberPicker
+              min={1}
+              max={200}
+              value={exercise.sets}
+              onValueChange={(value) =>
                 onEdit(index, {
                   ...exercise,
-                  reps: Number(e.target.value),
+                  sets: value,
                 })
               }
-              className="flex w-8 appearance-none rounded-md bg-zinc-100 p-1.5 text-right dark:bg-zinc-700"
+              className="h-9 min-w-8 cursor-pointer rounded-md bg-zinc-100 dark:bg-zinc-700"
             />
             <span>x</span>
           </>
@@ -108,21 +114,24 @@ export function SortableExerciseItem({
             })
           }
           placeholder="Name exercises"
-          className="w-full min-w-24 rounded-md bg-zinc-100 p-1.5 dark:bg-zinc-700"
+          className="w-full rounded-md bg-zinc-100 p-1.5 dark:bg-zinc-700"
         />
 
         {exercise.type !== "time" && (
           <>
             <input
               type="number"
-              value={exercise.kg > 0 ? exercise.kg : ""}
+              min={0}
+              max={5000}
+              value={exercise.kg}
               onChange={(e) =>
                 onEdit(index, {
                   ...exercise,
                   kg: Number(e.target.value),
                 })
               }
-              className="flex max-w-10 rounded-md bg-zinc-100 p-1.5 text-right dark:bg-zinc-700"
+              onFocus={(e) => e.target.select()}
+              className="flex min-w-10 rounded-md bg-zinc-100 p-1.5 text-right dark:bg-zinc-700"
             />
             <span>kg</span>
           </>
@@ -141,16 +150,16 @@ export function SortableExerciseItem({
           <DropdownMenuContent
             side="bottom"
             align="end"
-            className="z-50 min-w-[150px] rounded-md bg-white p-1 shadow-md dark:bg-zinc-800"
+            className="z-50 min-w-[150px] rounded-md bg-white p-2 shadow-md dark:bg-zinc-800"
           >
             <DropdownMenuItem
-              className="flex cursor-pointer items-center justify-between rounded px-2 py-1 text-sm text-zinc-900 hover:bg-zinc-200 dark:text-zinc-100 dark:hover:bg-zinc-700"
+              className="flex cursor-pointer items-center justify-between rounded px-2 py-1 text-zinc-900 hover:bg-zinc-200 dark:text-zinc-100 dark:hover:bg-zinc-700"
               onSelect={() => onToggleType(index)}
             >
-              {exercise.type === "time" ? "Switch to reps" : "Switch to time"}
+              {exercise.type === "time" ? "Switch to sets" : "Switch to time"}
             </DropdownMenuItem>
             <DropdownMenuItem
-              className="cursor-pointer rounded px-2 py-1 text-sm text-red-600 hover:bg-zinc-200 dark:hover:bg-zinc-700"
+              className="cursor-pointer rounded px-2 py-1 text-red-600 hover:bg-zinc-200 dark:hover:bg-zinc-700"
               onClick={() => onRemove(index)}
             >
               Delete exercise

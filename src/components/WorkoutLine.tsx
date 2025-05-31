@@ -45,7 +45,7 @@ export function WorkoutLine(props: WorkoutLineProps) {
           </div>
         ) : (
           <div className="flex flex-1 items-center gap-2">
-            <span className="w-1/6">{props.data.reps}x</span>
+            <span className="w-1/6">{props.data.sets}x</span>
             <span className="break-words">{props.data.name}</span>
             <span className="w-full flex-1 border-b-[1px] border-b-zinc-400 dark:border-b-zinc-600" />
             <span>{props.data.kg}kg</span>

@@ -16,7 +16,7 @@ export function NavigatorBar() {
   return (
     <div className="flex justify-center">
       <ToggleGroup.Root
-        className="fixed bottom-10 flex max-w-fit gap-4 rounded-xl bg-zinc-200 p-3 shadow-[0_0_12px_2px_rgba(0,0,0,0.2)] dark:bg-zinc-800"
+        className="fixed bottom-10 flex max-w-fit gap-4 rounded-xl bg-zinc-200 p-3 shadow-[0_0_12px_1px_rgba(0,0,0,0.2)] dark:bg-zinc-800"
         type="single"
         value={location.pathname}
         onValueChange={(value) => {

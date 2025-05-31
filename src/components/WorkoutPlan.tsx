@@ -181,7 +181,7 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
   }
 
   function handleEditPlan() {
-    if (isViewing) {
+    if (isViewing || isWorking) {
       navigate(`/workout/editplan/${planId}`);
     }
   }
@@ -248,119 +248,6 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
           </SortableContext>
         </DndContext>
 
-        {/* {exercises.map((exercise, index) => (
-          <div className="flex gap-0.5" key={exercise.id}>
-            <div className="flex w-full items-center gap-0.5">
-              {exercise.type === "time" ? (
-                <>
-                  <input
-                    type="number"
-                    value={exercise.min > 0 ? exercise.min : ""}
-                    onChange={(e) =>
-                      handleEditExercise(index, {
-                        ...exercise,
-                        min: Number(e.target.value),
-                      })
-                    }
-                    className="flex h-9 w-6 rounded-md bg-zinc-100 p-0.5 text-right dark:bg-zinc-700"
-                  />
-                  <span>:</span>
-                  <input
-                    type="number"
-                    value={exercise.sec > 0 ? exercise.sec : ""}
-                    onChange={(e) =>
-                      handleEditExercise(index, {
-                        ...exercise,
-                        sec: Number(e.target.value),
-                      })
-                    }
-                    className="flex h-9 w-6 rounded-md bg-zinc-100  p-0.5 text-right dark:bg-zinc-700"
-                  />
-                </>
-              ) : (
-                <>
-                  <input
-                    type="number"
-                    value={exercise.reps > 0 ? exercise.reps : ""}
-                    onChange={(e) =>
-                      handleEditExercise(index, {
-                        ...exercise,
-                        reps: Number(e.target.value),
-                      })
-                    }
-                    className="flex w-8 appearance-none rounded-md bg-zinc-100 p-1.5 text-right dark:bg-zinc-700"
-                  />
-                  <span>x</span>
-                </>
-              )}
-
-              <input
-                type="text"
-                value={exercise.name}
-                onChange={(e) =>
-                  handleEditExercise(index, {
-                    ...exercise,
-                    name: e.target.value,
-                  })
-                }
-                placeholder="Name exercises"
-                className="w-full min-w-24 rounded-md bg-zinc-100 p-1.5 dark:bg-zinc-700"
-              />
-
-              {exercise.type !== "time" && (
-                <>
-                  <input
-                    type="number"
-                    value={exercise.kg > 0 ? exercise.kg : ""}
-                    onChange={(e) =>
-                      handleEditExercise(index, {
-                        ...exercise,
-                        kg: Number(e.target.value),
-                      })
-                    }
-                    className="flex max-w-10 rounded-md bg-zinc-100 p-1.5 text-right dark:bg-zinc-700"
-                  />
-                  <span>kg</span>
-                </>
-              )}
-
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button
-                    type="button"
-                    className="rounded-full p-1.5 hover:bg-zinc-200 dark:hover:bg-zinc-600"
-                  >
-                    <Bolt className="h-5 w-5" />
-                  </button>
-                </DropdownMenuTrigger>
-
-                <DropdownMenuContent
-                  side="bottom"
-                  align="end"
-                  className="z-50 min-w-[150px] rounded-md bg-white p-1 shadow-md dark:bg-zinc-800"
-                >
-                  <DropdownMenuItem
-                    className="flex cursor-pointer items-center justify-between rounded px-2 py-1 text-sm text-zinc-900 hover:bg-zinc-200 dark:text-zinc-100 dark:hover:bg-zinc-700"
-                    onSelect={() => {
-                      toggleMode(index);
-                    }}
-                  >
-                    {exercise.type === "time"
-                      ? "Switch to reps"
-                      : "Switch to time"}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    className="cursor-pointer rounded px-2 py-1 text-sm text-red-600 hover:bg-zinc-200 dark:hover:bg-zinc-700"
-                    onClick={() => handleRemoveExercise(index)}
-                  >
-                    Delete exercise
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
-        ))} */}
-
         <Button
           onClick={handleAddExercise}
           type="button"
@@ -383,10 +270,18 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
       </form>
     </Card>
   ) : isWorking ? (
-    <Card onClick={handleEditPlan} className="flex flex-col gap-3 p-2">
-      <strong className="hyphens-auto break-all text-xl font-normal">
-        {title}
-      </strong>
+    <Card className="flex flex-col gap-3 p-2">
+      <div className="flex items-center justify-between">
+        <strong className="hyphens-auto break-all text-xl font-normal">
+          {title}
+        </strong>
+        <Button
+          onClick={handleEditPlan}
+          className="cursor-pointer rounded-md bg-zinc-300 px-2 dark:bg-zinc-600"
+        >
+          Edit
+        </Button>
+      </div>
       {exercises.map((exercise) => (
         <WorkoutLine
           key={exercise.id}
