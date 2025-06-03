@@ -1,11 +1,11 @@
 import * as ToggleGroup from "@radix-ui/react-toggle-group";
-import { House, ClipboardList } from "lucide-react";
+import { House, ClipboardList, List } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const navItems = [
   { value: "/", icon: <House size={32} />, label: "home" },
+  { value: "/exercises", icon: <List size={32} />, label: "exercises" },
   { value: "/workout", icon: <ClipboardList size={32} />, label: "workout" },
-  // { value: "/exercises", icon: <ScrollText size={32} />, label: "exercises" },
   // { value: "/history", icon: <History size={32} />, label: "history" },
 ];
 

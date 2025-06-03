@@ -110,7 +110,7 @@ const useWorkout = () => {
       },
     };
 
-    saveDataToLocalStorage(updatedData); 
+    saveDataToLocalStorage(updatedData);
   }
 
   const addExercise = (exercise: Exercise) => {
@@ -147,7 +147,21 @@ const useWorkout = () => {
   };
 
   const addWorkout = (workout: WorkoutPlan) => {
-    const updatedData = { ...workoutData, plannedWorkouts: [...workoutData.plannedWorkouts, workout] };
+    const existingExercises = workoutData.exercises;
+
+    const newExercises = workout.exercises || [];
+
+    const combinedExercises = [
+      ...existingExercises,
+      ...newExercises.filter(ne => !existingExercises.some(ee => ee.id === ne.id))
+    ];
+
+    const updatedData = {
+      ...workoutData,
+      plannedWorkouts: [...workoutData.plannedWorkouts, workout],
+      exercises: combinedExercises,
+    };
+
     saveDataToLocalStorage(updatedData);
   };
 
@@ -155,7 +169,23 @@ const useWorkout = () => {
     const updatedWorkouts = workoutData.plannedWorkouts.map((workout) =>
       workout.id === workoutId ? { ...workout, ...updatedWorkout, updatedAt: new Date().toISOString() } : workout
     );
-    const updatedData = { ...workoutData, plannedWorkouts: updatedWorkouts };
+
+    const existingExercises = workoutData.exercises;
+    const newExercises = updatedWorkout.exercises || [];
+
+    const combinedExercises = [
+      ...existingExercises.filter(
+        ex => !newExercises.some(ne => ne.id === ex.id)
+      ),
+      ...newExercises,
+    ];
+
+    const updatedData = {
+      ...workoutData,
+      plannedWorkouts: updatedWorkouts,
+      exercises: combinedExercises,
+    };
+    
     saveDataToLocalStorage(updatedData);
   };
 

@@ -32,7 +32,6 @@ interface WorkoutPlanProps {
 export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
   const {
     workoutData,
-    addExercise,
     removeExercise,
     addWorkout,
     editWorkout,
@@ -163,7 +162,6 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
     };
 
     if (isCreating) {
-      exercises.forEach((exercise) => addExercise(exercise));
       addWorkout(updatedWorkoutPlan);
       alert("Workout plan added successfully!");
       navigate("/workout");
