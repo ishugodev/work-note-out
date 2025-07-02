@@ -113,6 +113,63 @@ const useWorkout = () => {
     saveDataToLocalStorage(updatedData);
   }
 
+  const toggleSetConfig = (exerciseId: string) => {
+    const updatedExercises = workoutData.exercises.map(exercise => {
+      if (exercise.id === exerciseId) {
+        const currentSetConfig = exercise.setConfig ?? "simple";
+        const newSetConfig = (currentSetConfig === "simple" ? "detailed" : "simple") as "simple" | "detailed";
+
+        return {
+          ...exercise,
+          setConfig: newSetConfig,
+          updatedAt: new Date().toISOString(),
+        };
+      }
+
+      return exercise;
+    });
+
+    const updatedPlannedWorkouts = workoutData.plannedWorkouts.map(workout => {
+      const updatedWorkoutExercises = workout.exercises.map(exercise => {
+        if (exercise.id === exerciseId) {
+          const currentSetConfig = exercise.setConfig ?? "simple";
+          const newSetConfig = (currentSetConfig === "simple" ? "detailed" : "simple") as "simple" | "detailed";
+
+          return {
+            ...exercise,
+            setConfig: newSetConfig,
+            updatedAt: new Date().toISOString(),
+          };
+        }
+
+        return exercise;
+      });
+
+      return {
+        ...workout,
+        exercises: updatedWorkoutExercises,
+        updatedAt: new Date().toISOString(),
+      }
+    });
+
+    const updatedData = {
+      ...workoutData,
+      exercises: updatedExercises,
+      plannedWorkouts: updatedPlannedWorkouts,
+    };
+
+    saveDataToLocalStorage(updatedData);
+  }
+
+  const removeDuplicateExercises = (exercises: Exercise[]) => {
+    const map = new Map<string, Exercise>();
+    for (const ex of exercises) {
+      const key = ex.name.trim().toLowerCase();
+      map.set(key, ex); // sobrescreve duplicados, mantém o último
+    }
+    return Array.from(map.values());
+  };
+
   const addExercise = (exercise: Exercise) => {
     const updatedData = { ...workoutData, exercises: [...workoutData.exercises, exercise] };
     saveDataToLocalStorage(updatedData);
@@ -148,18 +205,18 @@ const useWorkout = () => {
 
   const addWorkout = (workout: WorkoutPlan) => {
     const existingExercises = workoutData.exercises;
-
     const newExercises = workout.exercises || [];
 
-    const combinedExercises = [
-      ...existingExercises,
-      ...newExercises.filter(ne => !existingExercises.some(ee => ee.id === ne.id))
-    ];
+    const filteredNewExercises = newExercises.filter(ne =>
+      !existingExercises.some(ee =>
+        ee.name.trim().toLowerCase() === ne.name.trim().toLowerCase()
+      )
+    );
 
     const updatedData = {
       ...workoutData,
       plannedWorkouts: [...workoutData.plannedWorkouts, workout],
-      exercises: combinedExercises,
+      exercises: [...existingExercises, ...filteredNewExercises],
     };
 
     saveDataToLocalStorage(updatedData);
@@ -183,7 +240,7 @@ const useWorkout = () => {
     const updatedData = {
       ...workoutData,
       plannedWorkouts: updatedWorkouts,
-      exercises: combinedExercises,
+      exercises: removeDuplicateExercises(combinedExercises),
     };
     
     saveDataToLocalStorage(updatedData);
@@ -291,6 +348,7 @@ const useWorkout = () => {
     editWeeklyPlan,
     removeWeeklyPlan,
     toggleExerciseCheck,
+    toggleSetConfig,
   };
 };
 

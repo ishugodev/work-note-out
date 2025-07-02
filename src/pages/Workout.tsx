@@ -80,7 +80,9 @@ export function Workout() {
         className="mx-auto mb-32 mt-8 max-w-screen-sm animate-pageFadeIn"
       >
         <SideMenu />
-        <h1 className="mb-4 text-2xl font-semibold">Workout</h1>
+        <h1 className="mb-4 animate-titleFadeIn text-2xl font-semibold">
+          Workout setting
+        </h1>
 
         <p className="mb-2 font-medium text-zinc-600 dark:text-zinc-400">
           Week plans
@@ -89,7 +91,7 @@ export function Workout() {
           {workoutData.weeklyPlans.length > 0 ? (
             workoutData.weeklyPlans.map((plan, index) => {
               return (
-                <div key={plan.id}>
+                <div key={plan.id} className="">
                   {workoutData.weeklyPlans.length > 1 && (
                     <div className="mb-2 flex items-center justify-between">
                       <p>{index + 1}º week</p>
@@ -133,8 +135,16 @@ export function Workout() {
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {workoutData.plannedWorkouts.length > 0 ? (
-            workoutData.plannedWorkouts.map((plan) => (
-              <WorkoutPlan key={plan.id} planId={plan.id} mode="view" />
+            workoutData.plannedWorkouts.map((plan, index) => (
+              <div
+                key={plan.id}
+                className="animate-componentFadeIn"
+                style={{
+                  animationDelay: `${index * 200 + 200}ms`,
+                }}
+              >
+                <WorkoutPlan planId={plan.id} mode="view" />
+              </div>
             ))
           ) : (
             <p className="text-zinc-500 dark:text-zinc-400">

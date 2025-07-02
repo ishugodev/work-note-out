@@ -61,7 +61,11 @@ export default {
 			},
 			keyframes: {
 				pageFadeIn: {
-					'0%': { opacity: '0', transform: 'translateY(15px)' },
+					'0%': { opacity: '0', transform: 'translateY(5px)' },
+					'100%': { opacity: '1', transform: 'translateY(0)' },
+				},
+				titleFadeIn: {
+					'0%': { opacity: '0', transform: 'translateY(12px)' },
 					'100%': { opacity: '1', transform: 'translateY(0)' },
 				},
 				fadeIn: {
@@ -83,7 +87,8 @@ export default {
 			},
 			animation: {
 				pageFadeIn: 'pageFadeIn 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards',
-				fadeIn: 'fadeIn 0.3s ease forwards',
+				titleFadeIn: 'titleFadeIn 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards',
+				componentFadeIn: 'fadeIn 0.8s ease both',
 				fadeOut: 'fadeOut 0.2s ease forwards',
 				slideIn: 'slideIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards',
      			slideOut: 'slideOut 0.2s cubic-bezier(0.55, 0, 0.55, 0.2) forwards',

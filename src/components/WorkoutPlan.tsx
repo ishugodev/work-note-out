@@ -17,6 +17,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 
+import { useMuscleGroupDetector } from "@/hooks/useMuscleGroupDetector";
 import useWorkout from "@/hooks/useWorkout";
 
 import { Button } from "./Button";
@@ -36,7 +37,9 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
     addWorkout,
     editWorkout,
     toggleExerciseCheck,
+    toggleSetConfig,
   } = useWorkout();
+  const detectMuscleGroup = useMuscleGroupDetector();
   const [title, setTitle] = useState("");
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const navigate = useNavigate();
@@ -92,11 +95,23 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
       id: String(Date.now()),
       type: "reps",
       name: "",
-      sets: 0,
+      muscleGroup: "",
       min: 0,
       sec: 0,
-      reps: 0,
-      kg: 0,
+      setConfig: "simple",
+      repsRange: false,
+      simpleSet: {
+        sets: 0,
+        reps: 0,
+        kg: 0,
+      },
+      detailedSets: [
+        {
+          setType: "normal",
+          reps: 0,
+          kg: 0,
+        },
+      ],
       restTime: 0,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -121,10 +136,20 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
 
   function handleEditExercise(index: number, updatedExercise: Exercise) {
     const updatedExercises = [...exercises];
+
+    const newName = updatedExercise.name;
+    const detectedGroup = detectMuscleGroup(newName);
+    const prevGroup = updatedExercises[index].muscleGroup;
+
     updatedExercises[index] = {
       ...updatedExercises[index],
       ...updatedExercise,
+      muscleGroup:
+        detectedGroup !== "desconhecido" && detectedGroup !== ""
+          ? detectedGroup
+          : prevGroup,
     };
+
     setExercises(updatedExercises);
 
     if (isEditing) {
@@ -132,12 +157,7 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
         (plan) => plan.id === planId
       );
       if (updatedPlan) {
-        const updatedPlanExercises = updatedPlan.exercises.map(
-          (exercise: Exercise) =>
-            exercise.id === updatedExercise.id
-              ? { ...exercise, ...updatedExercise }
-              : exercise
-        );
+        const updatedPlanExercises = updatedExercises;
 
         const newPlan = { ...updatedPlan, exercises: updatedPlanExercises };
         editWorkout(planId, newPlan);
@@ -153,12 +173,18 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
+    const updatedExercises = exercises.map((exercise) => ({
+      ...exercise,
+      muscleGroup: detectMuscleGroup(exercise.name),
+      updatedAt: new Date().toISOString(),
+    }));
+
     const updatedWorkoutPlan: WorkoutPlan = {
       id: planId || uuidv4(),
       name: title,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      exercises,
+      exercises: updatedExercises,
     };
 
     if (isCreating) {
@@ -168,7 +194,7 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
     }
   }
 
-  function toggleMode(index: number) {
+  function handleToggleMode(index: number) {
     setExercises((prev) =>
       prev.map((exercise, i) =>
         i === index
@@ -176,6 +202,32 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
           : exercise
       )
     );
+  }
+
+  function handleToggleSetConfig(index: number) {
+    if (isCreating) {
+      setExercises((prev) =>
+        prev.map((exercise, i) =>
+          i === index
+            ? {
+                ...exercise,
+                setConfig:
+                  exercise.setConfig === "simple" ? "detailed" : "simple",
+              }
+            : exercise
+        )
+      );
+      return;
+    }
+
+    const id = exercises[index].id;
+    toggleSetConfig(id);
+
+    const plan = workoutData.plannedWorkouts.find((p) => p.id === planId);
+
+    if (plan) {
+      setExercises(plan.exercises);
+    }
   }
 
   function handleEditPlan() {
@@ -207,51 +259,134 @@ export function WorkoutPlan({ mode, planId }: WorkoutPlanProps) {
     }
   }
 
+  function handleAddDetailedSet(index: number) {
+    const updatedExercises = [...exercises];
+    const currentExercise = updatedExercises[index];
+
+    const newSet = {
+      setType: "normal" as SetType,
+      reps: 0,
+      kg: 0,
+    };
+    const currentSets = currentExercise.detailedSets ?? [];
+
+    updatedExercises[index] = {
+      ...currentExercise,
+      detailedSets: [...currentSets, newSet],
+    };
+
+    setExercises(updatedExercises);
+
+    if (isEditing) {
+      const plan = workoutData.plannedWorkouts.find((p) => p.id === planId);
+      if (plan) {
+        const updatedPlan = { ...plan, exercises: updatedExercises };
+        editWorkout(planId, updatedPlan);
+      }
+    }
+  }
+
+  function handleUpdateSetType(
+    exerciseIndex: number,
+    setIndex: number,
+    newType: SetType
+  ) {
+    const updatedExercises = [...exercises];
+    const sets = [...(updatedExercises[exerciseIndex].detailedSets ?? [])];
+
+    sets[setIndex] = {
+      ...sets[setIndex],
+      setType: newType,
+    };
+
+    updatedExercises[exerciseIndex] = {
+      ...updatedExercises[exerciseIndex],
+      detailedSets: sets,
+    };
+
+    setExercises(updatedExercises);
+
+    if (isEditing) {
+      const plan = workoutData.plannedWorkouts.find((p) => p.id === planId);
+      if (plan) {
+        const updatedPlan = { ...plan, exercises: updatedExercises };
+        editWorkout(planId, updatedPlan);
+      }
+    }
+  }
+
+  function handleToggleRepsRange(index: number) {
+    const updatedExercises = [...exercises];
+
+    updatedExercises[index] = {
+      ...updatedExercises[index],
+      repsRange: !updatedExercises[index].repsRange,
+    };
+
+    setExercises(updatedExercises);
+
+    if (isEditing) {
+      const plan = workoutData.plannedWorkouts.find((p) => p.id === planId);
+      if (plan) {
+        const updatedPlan = { ...plan, exercises: updatedExercises };
+        editWorkout(planId, updatedPlan);
+      }
+    }
+  }
+
   return isCreating || isEditing ? (
     <Card className="p-2">
       <form onSubmit={handleSubmit} className="flex w-full flex-col gap-3">
-        <label htmlFor="planName" className="dark:text-zinc-400">
-          Workout plan name
-        </label>
-        <input
-          id="planName"
-          type="text"
-          className="rounded-md bg-zinc-100 p-1.5 dark:bg-zinc-700"
-          value={title}
-          onChange={(e) => handleEditPlanName(e.target.value)}
-          required
-        />
+        <div className="grid gap-2">
+          <label htmlFor="planName" className="dark:text-zinc-400">
+            Workout plan name
+          </label>
+          <input
+            id="planName"
+            type="text"
+            className="rounded-md bg-zinc-100 p-1.5 dark:bg-zinc-700"
+            value={title}
+            onChange={(e) => handleEditPlanName(e.target.value)}
+            required
+          />
+        </div>
 
-        <DndContext
-          sensors={sensors}
-          modifiers={[restrictToVerticalAxis]}
-          collisionDetection={closestCenter}
-          onDragEnd={handleDragEnd}
-        >
-          <SortableContext
-            items={exercises.map((e) => e.id)}
-            strategy={verticalListSortingStrategy}
+        <div className="grid gap-3.5">
+          <DndContext
+            sensors={sensors}
+            modifiers={[restrictToVerticalAxis]}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
           >
-            {exercises.map((exercise, index) => (
-              <SortableExerciseItem
-                key={exercise.id}
-                id={exercise.id}
-                exercise={exercise}
-                index={index}
-                onEdit={handleEditExercise}
-                onRemove={handleRemoveExercise}
-                onToggleType={toggleMode}
-              />
-            ))}
-          </SortableContext>
-        </DndContext>
+            <SortableContext
+              items={exercises.map((e) => e.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              {exercises.map((exercise, index) => (
+                <SortableExerciseItem
+                  key={exercise.id}
+                  id={exercise.id}
+                  exercise={exercise}
+                  index={index}
+                  onEdit={handleEditExercise}
+                  onRemove={handleRemoveExercise}
+                  onToggleType={handleToggleMode}
+                  onToggleSetConfig={handleToggleSetConfig}
+                  onAddNewDetailedSet={handleAddDetailedSet}
+                  onUpdateSetType={handleUpdateSetType}
+                  onToggleRepsRange={handleToggleRepsRange}
+                />
+              ))}
+            </SortableContext>
+          </DndContext>
+        </div>
 
         <Button
           onClick={handleAddExercise}
           type="button"
-          className="flex justify-center rounded-md bg-zinc-100 p-2 dark:bg-zinc-700 dark:text-zinc-400"
+          className="flex items-center justify-center gap-1 rounded-md bg-zinc-100 p-2 text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400"
         >
-          <Plus />
+          <Plus className="h-5 w-5" />
           <span>Add exercise</span>
         </Button>
 
