@@ -133,7 +133,7 @@ export function Workout() {
           Workout plan
         </p>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2">
           {workoutData.plannedWorkouts.length > 0 ? (
             workoutData.plannedWorkouts.map((plan, index) => (
               <div
