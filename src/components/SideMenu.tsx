@@ -1,7 +1,8 @@
 // components/Sidebar.tsx
 import * as Dialog from "@radix-ui/react-dialog";
-import { X, Menu } from "lucide-react";
+import { X, Menu, Inbox, Info, House } from "lucide-react";
 import { ReactNode, useState } from "react";
+import { Link } from "react-router-dom";
 
 import { usePWAInstallPrompt } from "@/hooks/usePWAInstallPrompt";
 
@@ -18,7 +19,7 @@ export function SideMenu({ children }: SideMenuProps) {
   return (
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
       <Dialog.Trigger asChild>
-        <button className="text-zinc-100 dark:text-zinc-100">
+        <button className="text-zinc-900 dark:text-zinc-100">
           <Menu size={24} />
         </button>
       </Dialog.Trigger>
@@ -33,7 +34,9 @@ export function SideMenu({ children }: SideMenuProps) {
           className={`fixed left-0 top-0 z-50 h-full w-64 bg-zinc-100 p-6 text-zinc-900 shadow-xl data-[state=closed]:animate-slideOut data-[state=open]:animate-slideIn dark:bg-zinc-900 dark:text-zinc-100 ${isOpen ? "animate-slideIn" : "animate-slideOut"}`}
         >
           <div className="mb-6 flex items-center justify-between">
-            <Dialog.Title className="text-xl font-bold">Menu</Dialog.Title>
+            <Dialog.Title className="text-xl font-bold" asChild>
+              <a href="/">Work note out</a>
+            </Dialog.Title>
             <Dialog.Description className="sr-only">
               Sidebar navigation menu with links and actions.
             </Dialog.Description>
@@ -45,9 +48,18 @@ export function SideMenu({ children }: SideMenuProps) {
           </div>
 
           <nav className="flex flex-col gap-4">
-            <a href="/" className="">
-              Home
+            <a href="/"  className="flex items-center gap-2">
+              <House className="w-6" />
+              <span className="font-medium">Home</span>
             </a>
+            <Link to="/contact" className="flex items-center gap-2">
+              <Inbox className="w-6" />
+              <span className="font-medium">Contact me</span>
+            </Link>
+            <Link to="/about" className="flex items-center gap-2">
+              <Info className="w-6" />
+              <span className="font-medium">About</span>
+            </Link>
             {canInstall && (
               <Button
                 className="rounded-md bg-zinc-800 p-2"
