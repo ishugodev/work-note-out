@@ -1,50 +1,69 @@
-# React + TypeScript + Vite
+# 🏋️ Work Note Out
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Work Note Out** is a simple exercise note-taking app focused on helping you **plan and keep track of your weekly workout routines** — without distractions, overengineering or bloat.
 
-Currently, two official plugins are available:
+With it, you can:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Create custom workout plans by selecting and organizing exercises
+- Assign those plans to specific days of the week
+- Quickly view your weekly schedule right from the home screen
 
-## Expanding the ESLint configuration
+> 📌 The app **does not store logs or history** — the focus is on planning and execution, not tracking progress (at least for now).
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+---
 
-- Configure the top-level `parserOptions` property like this:
+## ✨ Features
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- 🗓️ Weekly routine overview
+- 🛠️ Custom workout plan creation
+- 📌 Assign plans to weekdays
+- ⚡ Fast, minimalist UI
+- 🌓 Light and dark mode
+- 📱 Progressive Web App (PWA) — use it like a native app on your device  
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+---
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## 🧠 Motivation
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+Built as a personal project by a developer passionate about **fitness** and **simplicity**. The idea was to create a tool to help plan workouts without distractions or clutter.
+
+No login required. No analytics. Just your plan.
+
+---
+
+## 🧪 Tech Stack
+
+- React + TypeScript
+- Tailwind CSS
+- Radix UI
+- Vite
+- LocalStorage (for saving data locally)
+
+---
+
+## 🔑 About the lockfile and package manager
+
+This project uses **pnpm** as its package manager, and includes a `pnpm-lock.yaml` file to lock dependency versions.
+
+If you try to install dependencies with **npm** or **yarn** instead of pnpm:
+
+- They won’t use the `pnpm-lock.yaml` file
+- This can lead to a different dependency tree and possibly different package versions
+- Which might cause unexpected bugs or issues
+
+**To ensure consistent installs and avoid problems, please use pnpm to install dependencies and run the project.**
+
+---
+
+## 🚀 Running Locally
+
+```bash
+# Clone o projeto
+git clone https://github.com/ishugodev/work-note-out.git
+cd work-note-out
+
+# Instale as dependências
+pnpm install
+
+# Rode o app
+pnpm run dev
