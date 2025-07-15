@@ -487,7 +487,6 @@ export function SortableExerciseItem({
                                   ...exercise,
                                   detailedSets: updatedSets,
                                 });
-                                // aqui o modal fecha sozinho, pois o trigger controla isso
                               }}
                             >
                               Confirmar
@@ -498,21 +497,6 @@ export function SortableExerciseItem({
                           </div>
                         </div>
                       </Modal>
-                      {/* <Button
-                        className="flex h-9 w-9 items-center justify-center"
-                        onClick={() => {
-                          const updatedSets =
-                            exercise.detailedSets?.filter((_, j) => j !== i) ??
-                            [];
-
-                          onEdit(index, {
-                            ...exercise,
-                            detailedSets: updatedSets,
-                          });
-                        }}
-                      >
-                        <X className="text-red-500" />
-                      </Button> */}
                     </div>
                   ))
                 )}
@@ -523,6 +507,7 @@ export function SortableExerciseItem({
             <div>
               <Button
                 className="flex w-full items-center justify-center gap-1 rounded-md bg-zinc-100 p-1.5 text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400"
+                type="button"
                 onClick={() => onAddNewDetailedSet(index)}
               >
                 <Plus className="h-5 w-5" />
